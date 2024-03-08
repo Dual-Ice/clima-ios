@@ -22,6 +22,7 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         searchTextField.delegate = self
+        weatherManager.delegate = self
     }
 
     @IBAction func searchBtnPressed(_ sender: UIButton) {
@@ -51,5 +52,21 @@ extension WeatherViewController: UITextFieldDelegate {
         }
         searchTextField.text = ""
     }
+    
+}
+
+extension WeatherViewController: WeatherManagerDelegate {
+    func didFail(with error: any Error) {
+        //
+    }
+    
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        DispatchQueue.main.async {
+            self.temperatureLabel.text = weather.temperatureString
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+        }
+    }
+    
+    
 }
 
